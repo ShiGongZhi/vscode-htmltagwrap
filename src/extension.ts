@@ -28,7 +28,7 @@ export function activate(context: vscode.ExtensionContext) {
  * 4. 支持多光标操作
  */
 async function wrapWithTag(editor: vscode.TextEditor) {
-  const isHtml = isHtmlFile(editor)
+  const isHtml = isHtmlLikeFile(editor)
 
   const config = vscode.workspace.getConfiguration('htmltagwrap')
 
@@ -46,7 +46,7 @@ async function wrapWithTag(editor: vscode.TextEditor) {
   // 从后往前处理选区，避免位置变化导致的偏移
   for (let i = selections.length - 1; i >= 0; i--) {
     const selection = selections[i]
-    const selectedText = editor.document.getText(selection)
+    const selectedText = editor.document.getText(selection).trim()
     const isMultiLine = selection.end.line !== selection.start.line
 
     if (
@@ -145,12 +145,12 @@ function isHtmlLikeFile(editor: vscode.TextEditor): boolean {
   // 支持HTML及相关的语言模式
   const htmlLikeLanguages = [
     'html',
-    'xml',
-    'xsl',
-    'jsx',
-    'tsx',
     'vue',
-    'svelte',
+    // 'xml',
+    // 'xsl',
+    // 'jsx',
+    // 'tsx',
+    // 'svelte',
   ]
   return htmlLikeLanguages.includes(languageId)
 }
